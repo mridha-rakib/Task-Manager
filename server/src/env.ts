@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 const env = createEnv({
   server: {
-    DATABASE_URL: z.string().url().optional(),
+    DATABASE_URL: z.string().url(),
   },
   shared: {
     NODE_ENV: z

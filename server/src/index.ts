@@ -3,10 +3,12 @@ import swaggerDocument from '../swagger_output.json';
 import app from '@/app';
 import env from './env';
 import { logger } from './middlewares/pino-logger';
+import { connectDB } from './database/database.conn';
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 (async () => {
+  await connectDB();
   app.listen(env.PORT, () => {
     logger.info(`Server running on port ${env.PORT}`);
   });

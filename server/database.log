@@ -1,0 +1,24 @@
+{"level":"warn","message":"Mongoose disconnected from DB","timestamp":"2025-02-13T17:08:13.302Z"}
+{"level":"warn","message":"Attempt 1 failed. Retrying in 5 seconds...","timestamp":"2025-02-13T17:08:13.310Z"}
+{"level":"error","message":"Mongoose connection error: MongoServerSelectionError: Right side of assignment cannot be destructured","timestamp":"2025-02-13T17:08:13.321Z"}
+{"level":"warn","message":"Mongoose disconnected from DB","timestamp":"2025-02-13T17:08:48.433Z"}
+{"level":"warn","message":"Attempt 2 failed. Retrying in 5 seconds...","timestamp":"2025-02-13T17:08:48.435Z"}
+{"level":"error","message":"Mongoose connection error: MongoServerSelectionError: Right side of assignment cannot be destructured","timestamp":"2025-02-13T17:08:48.436Z"}
+{"level":"warn","message":"Mongoose disconnected from DB","timestamp":"2025-02-13T17:09:23.586Z"}
+{"level":"warn","message":"Mongoose disconnected from DB","timestamp":"2025-02-13T17:10:03.934Z"}
+{"level":"warn","message":"Attempt 1 failed. Retrying in 5 seconds...","timestamp":"2025-02-13T17:10:03.941Z"}
+{"level":"error","message":"Mongoose connection error: MongoServerSelectionError: Right side of assignment cannot be destructured","timestamp":"2025-02-13T17:10:03.952Z"}
+{"level":"warn","message":"Mongoose disconnected from DB","timestamp":"2025-02-13T17:10:39.313Z"}
+{"level":"warn","message":"Attempt 2 failed. Retrying in 5 seconds...","timestamp":"2025-02-13T17:10:39.315Z"}
+{"level":"error","message":"Mongoose connection error: MongoServerSelectionError: Right side of assignment cannot be destructured","timestamp":"2025-02-13T17:10:39.317Z"}
+{"level":"warn","message":"Mongoose disconnected from DB","timestamp":"2025-02-13T17:11:38.269Z"}
+{"level":"warn","message":"Attempt 1 failed. Retrying in 5 seconds...","timestamp":"2025-02-13T17:11:38.281Z"}
+{"level":"error","message":"Mongoose connection error: MongoServerSelectionError: Right side of assignment cannot be destructured","timestamp":"2025-02-13T17:11:38.297Z"}
+{"level":"info","message":"Mongoose connected to DB","timestamp":"2025-02-13T17:11:48.586Z"}
+{"level":"info","message":"Connected to MongoDB database","timestamp":"2025-02-13T17:11:48.586Z"}
+{"level":"info","message":"Mongoose connected to DB","timestamp":"2025-02-13T17:12:17.716Z"}
+{"level":"info","message":"Connected to MongoDB database","timestamp":"2025-02-13T17:12:17.723Z"}
+{"level":"info","message":"Mongoose connected to DB","timestamp":"2025-02-13T17:13:04.115Z"}
+{"level":"info","message":"Connected to MongoDB database","timestamp":"2025-02-13T17:13:04.131Z"}
+{"level":"info","message":"Mongoose connected to DB","timestamp":"2025-02-13T17:13:16.536Z"}
+{"level":"info","message":"Connected to MongoDB database","timestamp":"2025-02-13T17:13:16.547Z"}
