@@ -21,12 +21,12 @@ const defaults: SignOptions = {
 };
 
 export const accessTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: env.JWT_EXPIRES_IN,
+  expiresIn: Number(env.JWT_EXPIRES_IN),
   secret: env.JWT_SECRET,
 };
 
 export const refreshTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: env.JWT_EXPIRES_IN,
+  expiresIn: Number(env.JWT_EXPIRES_IN),
   secret: env.JWT_SECRET,
 };
 
@@ -39,4 +39,23 @@ export const signJwtToken = (
     ...defaults,
     ...opts,
   });
+};
+
+export const verifyJwtToken = <TPayload extends object = AccessTPayload>(
+  token: string,
+  options?: VerifyOptions & { secret: string }
+) => {
+  try {
+    const { secret = env.JWT_SECRET, ...opts } = options || {};
+    console.log(opts);
+    const payload = jwt.verify(token, secret, {
+      ...defaults,
+      ...opts,
+    }) as TPayload;
+    return { payload };
+  } catch (err: any) {
+    return {
+      error: err.message,
+    };
+  }
 };

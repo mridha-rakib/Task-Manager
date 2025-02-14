@@ -1,7 +1,19 @@
 import { VerificationEnum } from '@/common/enums/verification-code.enum';
-import { BadRequestException } from '@/common/utils/catch-errors';
-import { fortyFiveMinutesFromNow } from '@/common/utils/date-time';
-import { refreshTokenSignOptions, signJwtToken } from '@/common/utils/jwt';
+import {
+  BadRequestException,
+  UnauthorizedException,
+} from '@/common/utils/catch-errors';
+import {
+  calculateExpirationDate,
+  fortyFiveMinutesFromNow,
+  ONE_DAY_IN_MS,
+} from '@/common/utils/date-time';
+import {
+  refreshTokenSignOptions,
+  type RefreshTPayload,
+  signJwtToken,
+  verifyJwtToken,
+} from '@/common/utils/jwt';
 import SessionModel from '@/database/models/session.model';
 import UserModel from '@/database/models/user.model';
 import VerificationCodeModel from '@/database/models/Verification.model';
@@ -88,6 +100,49 @@ export class AuthRepository {
       user,
       accessToken,
       refreshToken,
+    };
+  }
+
+  public async refreshToken(refreshToken: string) {
+    const { payload } = verifyJwtToken<RefreshTPayload>(refreshToken, {
+      secret: refreshTokenSignOptions.secret,
+    });
+
+    if (!payload) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const session = await SessionModel.findById(payload.sessionId);
+    const now = Date.now();
+
+    if (!session) {
+      throw new UnauthorizedException('Session does not exist');
+    }
+
+    if (session.expiredAt.getTime() <= now) {
+      throw new UnauthorizedException('Session expired');
+    }
+
+    const sessionRequireRefresh =
+      session.expiredAt.getTime() - now <= ONE_DAY_IN_MS;
+
+    if (sessionRequireRefresh) {
+      session.expiredAt = calculateExpirationDate(env.JWT_REFRESH_EXPIRES_IN);
+      await session.save();
+    }
+
+    const newRefreshToken = sessionRequireRefresh
+      ? signJwtToken({ sessionId: session._id }, refreshTokenSignOptions)
+      : undefined;
+
+    const accessToken = signJwtToken({
+      userId: String(session.userId),
+      sessionId: session._id,
+    });
+
+    return {
+      accessToken,
+      newRefreshToken,
     };
   }
 }

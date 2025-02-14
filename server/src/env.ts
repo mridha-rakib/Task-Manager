@@ -15,6 +15,8 @@ const env = createEnv({
     RESEND_API_KEY: z.string(),
     JWT_EXPIRES_IN: z.string(),
     JWT_SECRET: z.string(),
+    JWT_REFRESH_SECRET: z.string(),
+    JWT_REFRESH_EXPIRES_IN: z.string(),
     MAILER_SENDER: z.string(),
     LOG_LEVEL: z
       .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])

@@ -46,6 +46,7 @@ export class AuthController {
       throw new UnauthorizedException('Missing refresh token');
     }
 
-    // const {} = await this.authRepository.refreshToken
+    // const { accessToken, newRefreshToken } =
+    //   await this.authRepository.refreshToken(refreshToken);
   });
 }
