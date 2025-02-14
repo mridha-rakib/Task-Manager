@@ -15,8 +15,8 @@ export interface IUser extends TDocument {
   role: 'user' | 'admin';
 }
 
-export interface IUserDocument extends IUser, Document<string> {}
+export interface IUserDocument extends IUser, Document<string>, IUserMethods {}
 export interface IUserModel extends Model<IUserDocument> {}
-export interface IUserMethods extends IUserDocument {
+export interface IUserMethods {
   comparePassword(password: string): Promise<boolean>;
 }

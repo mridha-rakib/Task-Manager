@@ -10,7 +10,12 @@ const env = createEnv({
       .enum(['development', 'production', 'test'])
       .default('development'),
     PORT: z.coerce.number().default(5050),
-    BASE_PATH: z.string().default('/api'),
+    BASE_PATH: z.string().default('/api/v1'),
+    APP_ORIGIN: z.string().url(),
+    RESEND_API_KEY: z.string(),
+    JWT_EXPIRES_IN: z.string(),
+    JWT_SECRET: z.string(),
+    MAILER_SENDER: z.string(),
     LOG_LEVEL: z
       .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
       .default('info'),

@@ -47,8 +47,6 @@ const userSchema = new Schema<IUserDocument, IUserModel, IUserMethods>(
   }
 );
 
-userSchema.index({ name: 'text', email: 'text' });
-
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await hashValue(this.password);
@@ -56,14 +54,15 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.methods.comparePassword = async function (password: string) {
-  return compareValue(password, this.password);
+userSchema.index({ name: 'text', email: 'text' });
+
+userSchema.methods.comparePassword = async function (value: string) {
+  return compareValue(value, this.password);
 };
 
 userSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.password;
-    delete ret.userPreferences.twoFactorSecret;
     return ret;
   },
 });
