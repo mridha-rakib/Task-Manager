@@ -1,7 +1,7 @@
 import { asyncHandler } from '@/middlewares/asyncHandler';
 import type { AuthRepository } from './auth.repository';
 import { zParse } from '@/common/utils/validators.util';
-import { createUserSchema } from '../user/user.schema';
+import { createUserSchema, verificationEmailSchema } from '../user/user.schema';
 import { HTTPSTATUS } from '@/config/http-config';
 import { loginAuthSchema } from './auth.schema';
 import {
@@ -67,5 +67,23 @@ export class AuthController {
       .json({
         message: 'Refresh access token successfully',
       });
+  });
+
+  public verifyEmail = asyncHandler(async (req, res): Promise<any> => {
+    const { code: verificationCOde } = await zParse(
+      verificationEmailSchema,
+      req,
+      res
+    );
+
+    const { user } = await this.authRepository.verifyEmail(verificationCOde);
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: 'Email verified successfully',
+    });
+  });
+
+  public forgotPassword = asyncHandler(async (req, res) => {
+    
   });
 }

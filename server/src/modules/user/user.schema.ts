@@ -20,6 +20,12 @@ export const userGeneric = z.object({
   role: z.enum(['user', 'admin']).default('user'),
 });
 
+export const verificationCodeSchema = z
+  .string({ required_error: 'Code is required' })
+  .trim()
+  .min(1)
+  .max(25);
+
 export const createUserSchema = z
   .object({
     body: userGeneric.pick({
@@ -36,5 +42,5 @@ export const createUserSchema = z
   });
 
 export const verificationEmailSchema = z.object({
-  code: z.string({ required_error: 'Code is required' }).trim().min(1).max(25),
+  code: verificationCodeSchema,
 });
