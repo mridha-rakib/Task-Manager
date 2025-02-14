@@ -4,7 +4,11 @@ import { zParse } from '@/common/utils/validators.util';
 import { createUserSchema } from '../user/user.schema';
 import { HTTPSTATUS } from '@/config/http-config';
 import { loginAuthSchema } from './auth.schema';
-import { setAuthenticationCookies } from '@/common/utils/cookie';
+import {
+  getAccessTokenCookieOptions,
+  getRefreshTokenCookieOptions,
+  setAuthenticationCookies,
+} from '@/common/utils/cookie';
 import { UnauthorizedException } from '@/common/utils/catch-errors';
 
 export class AuthController {
@@ -46,7 +50,22 @@ export class AuthController {
       throw new UnauthorizedException('Missing refresh token');
     }
 
-    // const { accessToken, newRefreshToken } =
-    //   await this.authRepository.refreshToken(refreshToken);
+    const { accessToken, newRefreshToken } =
+      await this.authRepository.refreshToken(refreshToken);
+
+    if (newRefreshToken) {
+      res.cookie(
+        'refreshToken',
+        newRefreshToken,
+        getRefreshTokenCookieOptions()
+      );
+    }
+
+    return res
+      .status(HTTPSTATUS.OK)
+      .cookie('accessToken', accessToken, getAccessTokenCookieOptions())
+      .json({
+        message: 'Refresh access token successfully',
+      });
   });
 }
