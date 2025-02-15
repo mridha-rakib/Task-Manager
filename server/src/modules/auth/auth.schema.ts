@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { userGeneric } from '../user/user.schema';
+import { userGeneric, verificationCodeSchema } from '../user/user.schema';
 
 export const authGeneric = z.object({
   email: userGeneric.shape.email,
@@ -9,4 +9,9 @@ export const authGeneric = z.object({
 
 export const loginAuthSchema = z.object({
   body: authGeneric,
+});
+
+export const resetPasswordSchema = z.object({
+  password: userGeneric.shape.password,
+  verificationCode: verificationCodeSchema,
 });

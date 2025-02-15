@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 export const userGeneric = z.object({
   name: z.string({ required_error: 'Name is required' }).min(1).max(255),
-  email: z.string({ required_error: 'Invalid email address' }).email(),
+  email: z
+    .string({ required_error: 'Email is required' })
+    .email({ message: 'Invalid email address' })
+    .min(1)
+    .max(255),
   isEmailVerified: z.boolean().default(false),
   password: z
     .string({ required_error: 'Password must be at least 6 characters long' })
@@ -43,4 +47,10 @@ export const createUserSchema = z
 
 export const verificationEmailSchema = z.object({
   code: verificationCodeSchema,
+});
+
+export const emailSchema = z.object({
+  body: userGeneric.pick({
+    email: true,
+  }),
 });

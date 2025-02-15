@@ -1,10 +1,15 @@
 import { asyncHandler } from '@/middlewares/asyncHandler';
 import type { AuthRepository } from './auth.repository';
 import { zParse } from '@/common/utils/validators.util';
-import { createUserSchema, verificationEmailSchema } from '../user/user.schema';
-import { HTTPSTATUS } from '@/config/http-config';
-import { loginAuthSchema } from './auth.schema';
 import {
+  createUserSchema,
+  emailSchema,
+  verificationEmailSchema,
+} from '../user/user.schema';
+import { HTTPSTATUS } from '@/config/http-config';
+import { loginAuthSchema, resetPasswordSchema } from './auth.schema';
+import {
+  clearAuthenticationCookies,
   getAccessTokenCookieOptions,
   getRefreshTokenCookieOptions,
   setAuthenticationCookies,
@@ -84,6 +89,24 @@ export class AuthController {
   });
 
   public forgotPassword = asyncHandler(async (req, res) => {
-    
+    const { body: data } = await zParse(emailSchema, req, res);
+    const { email } = data;
+    await this.authRepository.forgotPassword(email);
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: 'Password reset email sent',
+    });
   });
+
+  public resetPassword = asyncHandler(async (req, res): Promise<any> => {
+    const data = await zParse(resetPasswordSchema, req, res);
+
+    await this.authRepository.resetPassword(data);
+
+    return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({
+      message: 'Reset Password successfully',
+    });
+  });
+
+  public logout = asyncHandler(async (req, res) => {});
 }
