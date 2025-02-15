@@ -5,6 +5,7 @@ import express, {
   type NextFunction,
 } from 'express';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { pinoLogger } from '@/middlewares/pino-logger';
 import {
   errorHandler,
@@ -18,6 +19,14 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: env.APP_ORIGIN,
+    credentials: true,
+  })
+);
+
 app.use(passport.initialize());
 app.use(pinoLogger());
 app.use(env.BASE_PATH, rootRouter);
