@@ -14,7 +14,11 @@ import {
   getRefreshTokenCookieOptions,
   setAuthenticationCookies,
 } from '@/common/utils/cookie';
-import { UnauthorizedException } from '@/common/utils/catch-errors';
+import {
+  NotFoundException,
+  UnauthorizedException,
+} from '@/common/utils/catch-errors';
+import { logger } from '@/middlewares/pino-logger';
 
 export class AuthController {
   private authRepository: AuthRepository;
@@ -22,6 +26,12 @@ export class AuthController {
   constructor(authRepository: AuthRepository) {
     this.authRepository = authRepository;
   }
+
+  public test = asyncHandler(async (req, res): Promise<any> => {
+    return res.status(HTTPSTATUS.OK).json({
+      message: 'Test endpoint is working',
+    });
+  });
 
   public register = asyncHandler(async (req, res): Promise<any> => {
     const { body: data } = await zParse(createUserSchema, req, res);
@@ -77,14 +87,14 @@ export class AuthController {
   public verifyEmail = asyncHandler(async (req, res): Promise<any> => {
     const { code: verificationCOde } = await zParse(
       verificationEmailSchema,
-      req,
+      req.body,
       res
     );
-
     const { user } = await this.authRepository.verifyEmail(verificationCOde);
 
     return res.status(HTTPSTATUS.OK).json({
       message: 'Email verified successfully',
+      user,
     });
   });
 
@@ -99,8 +109,8 @@ export class AuthController {
   });
 
   public resetPassword = asyncHandler(async (req, res): Promise<any> => {
-    const data = await zParse(resetPasswordSchema, req, res);
-
+    const data = await zParse(resetPasswordSchema, req.body, res);
+    console.log(data);
     await this.authRepository.resetPassword(data);
 
     return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({
@@ -108,5 +118,16 @@ export class AuthController {
     });
   });
 
-  public logout = asyncHandler(async (req, res) => {});
+  public logout = asyncHandler(async (req, res): Promise<any> => {
+    const sessionId = req.sessionId;
+    console.log('sessionId: ', sessionId);
+    if (!sessionId) {
+      throw new NotFoundException('Session is invalid.');
+    }
+    await this.authRepository.logout(sessionId);
+
+    return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({
+      message: 'User logout successfully',
+    });
+  });
 }

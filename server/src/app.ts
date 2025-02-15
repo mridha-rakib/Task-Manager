@@ -12,12 +12,13 @@ import {
 } from './middlewares/error-handler.middleware';
 import rootRouter from './modules/routes/index.route';
 import env from './env';
-
+import passport from '@/middlewares/passport';
 const app: Application = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize());
 app.use(pinoLogger());
 app.use(env.BASE_PATH, rootRouter);
 app.use(errorHandler);

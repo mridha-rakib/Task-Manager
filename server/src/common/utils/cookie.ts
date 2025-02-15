@@ -14,10 +14,12 @@ const defaults: CookieOptions = {
   httpOnly: true,
 };
 
-export const clearAuthenticationCookies = (res: Response): Response =>
-  res.clearCookie('accessToken').clearCookie('refreshToken', {
+export const clearAuthenticationCookies = (res: Response): Response => {
+  console.log('Clearing accessToken and refreshToken cookies');
+  return res.clearCookie('accessToken').clearCookie('refreshToken', {
     path: REFRESH_PATH,
   });
+};
 
 export const getRefreshTokenCookieOptions = (): CookieOptions => {
   const expiresIn = String(env.JWT_EXPIRES_IN);

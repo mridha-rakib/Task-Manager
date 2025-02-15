@@ -3,9 +3,12 @@ import env from '@/env';
 import type { IUserDocument } from '@/modules/user/user.interface';
 import jwt, { type SignOptions, type VerifyOptions } from 'jsonwebtoken';
 
+const expiresIn = env.JWT_EXPIRES_IN;
+const numericValue = parseInt(expiresIn, 10);
+
 export type AccessTPayload = {
-  userId: IUserDocument['_id'];
-  sessionId: SessionDocument['_id'];
+  userId: Extract<IUserDocument['_id'], string>;
+  sessionId: Extract<SessionDocument['_id'], string>;
 };
 
 export type RefreshTPayload = {
@@ -21,12 +24,13 @@ const defaults: SignOptions = {
 };
 
 export const accessTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: Number(env.JWT_EXPIRES_IN),
+  expiresIn: numericValue,
   secret: env.JWT_SECRET,
 };
 
+
 export const refreshTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: Number(env.JWT_EXPIRES_IN),
+  expiresIn: numericValue,
   secret: env.JWT_SECRET,
 };
 

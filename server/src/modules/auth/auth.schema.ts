@@ -15,3 +15,5 @@ export const resetPasswordSchema = z.object({
   password: userGeneric.shape.password,
   verificationCode: verificationCodeSchema,
 });
+
+export type TAuthLogin = z.infer<typeof loginAuthSchema>['body'];

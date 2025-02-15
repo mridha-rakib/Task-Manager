@@ -32,6 +32,7 @@ import {
 import { logger } from '@/middlewares/pino-logger';
 import type { IResetPassword } from './auth.interface';
 import { hashValue } from '@/common/utils/bcrypt';
+import type { TAuthLogin } from './auth.schema';
 
 export class AuthRepository {
   public async register(registerData: any) {
@@ -70,7 +71,7 @@ export class AuthRepository {
     };
   }
 
-  public async login(loginData: any) {
+  public async login(loginData: TAuthLogin) {
     const { email, password, userAgent } = loginData;
     logger.info(`Login attempt for email: ${email}`);
 
@@ -95,9 +96,10 @@ export class AuthRepository {
       userAgent,
     });
 
+    logger.info(`Signing tokens for user ID: ${user._id}`);
     const accessToken = signJwtToken({
-      userId: user._id,
-      sessionId: session._id,
+      userId: user._id.toString(),
+      sessionId: session._id?.toString(),
     });
 
     const refreshToken = signJwtToken(
