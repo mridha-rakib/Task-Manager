@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 
 import { toast } from "@/hooks/use-toast";
-import { sessionDelMutationFn, sessionsQueryFn } from "@/lib/api";
+import { sessionDeleteMutationFn, sessionsQueryFn } from "@/lib/api";
 
 import SessionItem from "./SessionItem";
 
@@ -18,7 +18,7 @@ const Sessions = () => {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: sessionDelMutationFn,
+    mutationFn: sessionDeleteMutationFn,
   });
 
   const sessions = data?.sessions || [];
@@ -53,11 +53,7 @@ const Sessions = () => {
         <h3 className="text-slate-12 mb-1 text-xl font-bold tracking-[-0.16px]">
           Sessions
         </h3>
-        <p className="dark:text-gray-100 mb-6 max-w-xl text-sm font-normal text-[#0007149f]">
-          Sessions are the devices you are using or that have used your Squeezy
-          These are the sessions where your account is currently logged in. You
-          can log out of each session.
-        </p>
+
         {isLoading ? (
           <Loader size="35px" className="animate-spin" />
         ) : (
@@ -67,7 +63,7 @@ const Sessions = () => {
                 Current active session
               </h5>
               <p className="dark:text-gray-100 mb-6 text-sm text-[#0007149f]">
-                You’re logged into this Squeezy account on this device and are
+                You’re logged into this TMS account on this device and are
                 currently using it.
               </p>
             </div>
@@ -85,7 +81,7 @@ const Sessions = () => {
               <div className="mt-4">
                 <h5 className="text-base font-semibold">Other sessions</h5>
                 <ul className="max-h-[400px mt-4 w-full space-y-3 overflow-y-auto">
-                  {otherSessions?.map((session) => (
+                  {otherSessions?.map((session: any) => (
                     <li>
                       <SessionItem
                         loading={isPending}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -18,7 +19,6 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import Logo from "@/components/logo/index";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -43,12 +43,14 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuthContext } from "@/context/auth-provider";
 
+import tms from "../../../../public/tms.png";
 import LogoutDialog from "./common/LogoutDialog";
 
 const Asidebar = () => {
   const { theme, setTheme } = useTheme();
 
   const { isLoading, user } = useAuthContext();
+  console.log("User is undefined", user);
   const [isOpen, setIsOpen] = useState(false);
 
   const { open } = useSidebar();
@@ -79,16 +81,20 @@ const Asidebar = () => {
     <>
       <Sidebar collapsible="icon">
         <SidebarHeader className="!pt-0 dark:bg-background">
-          <div className="flex h-[60px] items-center">
-            <Logo fontSize="20px" size="30px" url="/home" />
-            {open && (
-              <Link
-                href="/home"
-                className="text-black mb-0 ml-2 hidden text-xl font-bold tracking-[-0.16px] dark:text-[#fcfdffef] md:flex"
-              >
-                Task Management
+          <div className="justify-between">
+            <div className="flex h-[60px] items-center">
+              <Link href="/">
+                <Image src={tms} alt="logo" height={110} width={110} />
               </Link>
-            )}
+              {open && (
+                <Link
+                  href="/home"
+                  className="text-black mb-0 ml-2 hidden text-xl font-bold tracking-[-0.16px] dark:text-[#fcfdffef] md:flex"
+                >
+                  Task Management
+                </Link>
+              )}
+            </div>
           </div>
         </SidebarHeader>
         <SidebarContent className="dark:bg-background">
@@ -126,8 +132,9 @@ const Asidebar = () => {
                     >
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarFallback className="rounded-lg">
-                          {user?.name?.split(" ")?.[0]?.charAt(0)}
-                          {user?.name?.split(" ")?.[1]?.charAt(0)}
+                          {/* {user?.name?.split(" ")?.[0]?.charAt(0)}
+                          {user?.name?.split(" ")?.[1]?.charAt(0)} */}
+                          {user?.name}
                         </AvatarFallback>
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">

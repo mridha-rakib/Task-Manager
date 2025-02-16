@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
-
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/context/auth-provider";
 import QueryProvider from "@/context/query-provider";
+import { ThemeProvider } from "@/context/theme-provider";
 
 import "./globals.css";
 
@@ -38,7 +37,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
           <Toaster />
         </QueryProvider>
       </body>
