@@ -60,7 +60,8 @@ export class AuthRepository {
     });
 
     const verificationUrl = `${env.APP_ORIGIN}/confirm-account?code=${verification.code}`;
-
+    console.log(newUser.email);
+    console.log(verificationUrl);
     await sendEmail({
       to: newUser.email,
       ...verifyEmailTemplate(verificationUrl),

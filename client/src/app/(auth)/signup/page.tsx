@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -21,14 +22,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { registerMutationFn } from "@/lib/api";
-import { formSchema } from "@/lib/validation";
 
-export default function SignUpForm() {
+import Logo from "../../../../public/tms.png";
+
+export default function SignUp() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { mutate, isPending } = useMutation({
     mutationFn: registerMutationFn,
   });
+
+  const formSchema = z
+    .object({
+      name: z.string().trim().min(1, {
+        message: "Name is required",
+      }),
+      email: z.string().trim().email().min(1, {
+        message: "Email is required",
+      }),
+      password: z.string().trim().min(1, {
+        message: "Password is required",
+      }),
+      confirmPassword: z.string().min(1, {
+        message: "Confirm Password is required",
+      }),
+    })
+    .refine((val) => val.password === val.confirmPassword, {
+      message: "Password does not match",
+      path: ["confirmPassword"],
+    });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,24 +63,12 @@ export default function SignUpForm() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("values: ", values);
     mutate(values, {
       onSuccess: () => {
         setIsSubmitted(true);
       },
       onError: (error) => {
         console.log(error);
-        let errorMessage = "An unexpected error occurred. Please try again.";
-
-        // if (typeof error === "object" && error !== null) {
-        //   // Check if it's an HTTP error with a response
-        //   if ("response" in error && error.response) {
-        //     errorMessage = error?.response || errorMessage;
-        //   } else if ("message" in error) {
-        //     // Handle other types of errors (e.g., network errors)
-        //     errorMessage = error.message;
-        //   }
-        // }
         toast({
           title: "Error",
           description: error.message,
@@ -73,8 +83,16 @@ export default function SignUpForm() {
       <main className="h-auto min-h-[590px] w-full max-w-full pt-10">
         {!isSubmitted ? (
           <div className="w-full rounded-md p-5">
+            <div className="flex items-center justify-center">
+              <Link href="/">
+                <Image src={Logo} alt="logo" height={110} width={110} />
+              </Link>
+              <span className="text-4xl font-bold text-primary">
+                Welcome to TMS
+              </span>
+            </div>
             <h1 className="mb-1.5 mt-8 text-center text-xl font-bold tracking-[-0.16px] dark:text-[#fcfdffef] sm:text-left">
-              Create a Task Management Account
+              Create a TMS account
             </h1>
             <p className="mb-6 text-center text-base font-normal dark:text-[#f1f7feb5] sm:text-left">
               Already have an account?{" "}
@@ -83,7 +101,6 @@ export default function SignUpForm() {
               </Link>
               .
             </p>
-
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="mb-4">
@@ -96,7 +113,7 @@ export default function SignUpForm() {
                           Name
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Rakib Mahmud Mridha" {...field} />
+                          <Input placeholder="Rakib MM" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -114,7 +131,7 @@ export default function SignUpForm() {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="subscribeto@channel.com"
+                            placeholder="rakibmahmudmridha@gmail.com"
                             autoComplete="off"
                             {...field}
                           />
@@ -145,6 +162,7 @@ export default function SignUpForm() {
                     )}
                   />
                 </div>
+
                 <div className="mb-4">
                   <FormField
                     control={form.control}
@@ -175,16 +193,8 @@ export default function SignUpForm() {
                   Create account
                   <ArrowRight />
                 </Button>
+
                 <div className="mb-4 mt-4 flex items-center justify-center">
-                  <div
-                    aria-hidden="true"
-                    className="h-px w-full bg-[#eee] dark:bg-[#d6ebfd30]"
-                    data-orientation="horizontal"
-                    role="separator"
-                  ></div>
-                  <span className="mx-4 text-xs font-normal dark:text-[#f1f7feb5]">
-                    OR
-                  </span>
                   <div
                     aria-hidden="true"
                     className="h-px w-full bg-[#eee] dark:bg-[#d6ebfd30]"
@@ -194,6 +204,17 @@ export default function SignUpForm() {
                 </div>
               </form>
             </Form>
+            <p className="mt-4 text-xs font-normal">
+              By signing up, you agree to our{" "}
+              <a className="text-primary hover:underline" href="#">
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a className="text-primary hover:underline" href="#">
+                Privacy Policy
+              </a>
+              .
+            </p>
           </div>
         ) : (
           <div className="flex h-[80vh] w-full flex-col items-center justify-center gap-2 rounded-md">

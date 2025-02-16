@@ -38,3 +38,5 @@ export const getUserSessionQueryFn = async () => await API.get(`/session/`);
 
 export const verifyEmailMutationFn = async (data: verifyEmailType) =>
   await API.post(`/auth/verify/email`, data);
+
+export const logoutMutationFn = async () => await API.post(`/auth/logout`);

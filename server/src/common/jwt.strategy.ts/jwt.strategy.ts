@@ -41,6 +41,8 @@ export const setupJwtStrategy = (passport: PassportStatic) => {
         }
 
         req.sessionId = payload.sessionId;
+        console.log('SessionID: ', req.sessionId);
+        console.log('User: ', user);
         return done(null, user);
       } catch (error) {
         return done(error, false);
