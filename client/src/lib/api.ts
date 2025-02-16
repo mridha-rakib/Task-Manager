@@ -48,3 +48,7 @@ export const sessionDeleteMutationFn = async (id: string) =>
   await API.delete(`/session/${id}`);
 
 export const logoutMutationFn = async () => await API.post(`/auth/logout`);
+
+
+// task mutation functions
+export const createTaskMutationFn = async(data:)

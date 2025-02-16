@@ -61,6 +61,7 @@ export class AuthController {
 
   public refreshToken = asyncHandler(async (req, res): Promise<any> => {
     const refreshToken = req.cookies.refreshToken as string | undefined;
+    console.log(refreshToken);
     if (!refreshToken) {
       throw new UnauthorizedException('Missing refresh token');
     }
@@ -76,12 +77,14 @@ export class AuthController {
       );
     }
 
-    return res
+    res
       .status(HTTPSTATUS.OK)
       .cookie('accessToken', accessToken, getAccessTokenCookieOptions())
       .json({
         message: 'Refresh access token successfully',
       });
+
+    res.send('Hello');
   });
 
   public verifyEmail = asyncHandler(async (req, res): Promise<any> => {
@@ -120,7 +123,6 @@ export class AuthController {
 
   public logout = asyncHandler(async (req, res): Promise<any> => {
     const sessionId = req.sessionId;
-    console.log('sessionId: ', sessionId);
     if (!sessionId) {
       throw new NotFoundException('Session is invalid.');
     }

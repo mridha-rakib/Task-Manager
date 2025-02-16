@@ -35,14 +35,12 @@ export const setupJwtStrategy = (passport: PassportStatic) => {
     new JwtStrategy(options, async (req, payload: JwtPayload, done) => {
       try {
         const user = await userRepository.findUserById(payload.userId);
-        console.log(user);
         if (!user) {
           return done(null, false);
         }
 
         req.sessionId = payload.sessionId;
-        console.log('SessionID: ', req.sessionId);
-        console.log('User: ', user);
+        
         return done(null, user);
       } catch (error) {
         return done(error, false);

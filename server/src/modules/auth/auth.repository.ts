@@ -102,7 +102,7 @@ export class AuthRepository {
       userId: user._id.toString(),
       sessionId: session._id?.toString(),
     });
-
+    
     const refreshToken = signJwtToken(
       {
         sessionId: session._id,

@@ -1,9 +1,5 @@
+import type { TDocument } from '@/common/utils/common.type';
 import { Document, Model } from 'mongoose';
-
-import type { SchemaTimestampsConfig } from 'mongoose';
-
-export type TDocument = Pick<Document<string>, '_id'> &
-  Omit<SchemaTimestampsConfig, 'currentTime'>;
 
 export interface IUser extends TDocument {
   name: string;

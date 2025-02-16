@@ -2,10 +2,17 @@ import type { SessionDocument } from '@/database/models/session.model';
 import env from '@/env';
 import type { IUserDocument } from '@/modules/user/user.interface';
 import jwt, { type SignOptions, type VerifyOptions } from 'jsonwebtoken';
+import { calculateExpirationDate } from './date-time';
 
 const expiresIn = env.JWT_EXPIRES_IN;
-const numericValue = parseInt(expiresIn, 10);
+const jwtExpire = calculateExpirationDate(expiresIn);
+const jwtAcsTimeStamp = new Date(jwtExpire).getTime();
 
+const jwtRefreshExpiresIn = env.JWT_REFRESH_EXPIRES_IN;
+const jwtRefreshExp = calculateExpirationDate(jwtRefreshExpiresIn);
+const jwtRefreshTimeStamp = new Date(jwtRefreshExp).getTime();
+
+console.log(jwtExpire, jwtRefreshExp);
 export type AccessTPayload = {
   userId: Extract<IUserDocument['_id'], string>;
   sessionId: Extract<SessionDocument['_id'], string>;
@@ -24,14 +31,13 @@ const defaults: SignOptions = {
 };
 
 export const accessTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: numericValue,
+  expiresIn: jwtAcsTimeStamp,
   secret: env.JWT_SECRET,
 };
 
-
 export const refreshTokenSignOptions: SignOptsAndSecret = {
-  expiresIn: numericValue,
-  secret: env.JWT_SECRET,
+  expiresIn: jwtRefreshTimeStamp,
+  secret: env.JWT_REFRESH_SECRET,
 };
 
 export const signJwtToken = (

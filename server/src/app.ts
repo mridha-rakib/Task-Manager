@@ -32,5 +32,12 @@ app.use(pinoLogger());
 app.use(env.BASE_PATH, rootRouter);
 app.use(errorHandler);
 app.use(notFountHandler);
+app.use((req, res, next) => {
+  console.error(`Content-Length: ${req.headers['content-length']}`);
+  console.error(
+    `Request Body Size: ${req.body ? Buffer.byteLength(JSON.stringify(req.body)) : 0}`
+  );
+  next();
+});
 
 export default app;

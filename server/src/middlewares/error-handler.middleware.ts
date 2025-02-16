@@ -11,6 +11,7 @@ import {
   clearAuthenticationCookies,
   REFRESH_PATH,
 } from '@/common/utils/cookie';
+import { MongoError } from 'mongodb';
 
 export const formatZodError = (res: Response, error: z.ZodError) => {
   console.log(error);
@@ -21,6 +22,22 @@ export const formatZodError = (res: Response, error: z.ZodError) => {
   return res.status(HTTPSTATUS.BAD_REQUEST).json({
     message: 'Validation failed',
     errors: errors,
+  });
+};
+
+export const formatDuplicateKeyError = (res: Response, error: MongoError) => {
+  // Extract the duplicate key field from the error message
+  const keyMatch = error.message.match(/index: (\w+)_\d+/);
+  const key = keyMatch ? keyMatch[1] : 'unknown';
+
+  return res.status(HTTPSTATUS.CONFLICT).json({
+    message: `Duplicate key error`,
+    errors: [
+      {
+        field: key,
+        message: `The value for '${key}' already exists and must be unique.`,
+      },
+    ],
   });
 };
 
@@ -51,6 +68,10 @@ export const errorHandler: ErrorRequestHandler = (
       message: error.message,
       statusCode: error.statusCode,
     });
+  }
+
+  if (error instanceof MongoError && error.code === 11000) {
+    return formatDuplicateKeyError(res, error);
   }
 
   return res.status(HTTPSTATUS.INTERNAL_SERVER_ERROR).json({

@@ -10,6 +10,6 @@ export const preSaveUserHook = async function (
 ) {
   const user = this;
   if (!user.isModified('password') || !user.isNew) return next();
-  user.password = await user.generatePasswordHash(user.password);
+  // user.password = await user.generatePasswordHash(user.password);
   return next();
 };
