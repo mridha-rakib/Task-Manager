@@ -2,18 +2,14 @@
 
 import { redirect } from "next/navigation";
 
-import useAuth from "@/hooks/use-auth";
+import { useAuthContext } from "@/context/auth-provider";
+import { AuthProvider } from "@/context/auth-provider";
 
 export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data, error, isLoading, isFetching, refetch } = useAuth();
-  if (data) {
-    redirect("/home");
-  }
-  console.log("Layout Data: ", data);
   return (
     <div className="h-auto w-full">
       <div className="flex h-full w-full items-center justify-center">

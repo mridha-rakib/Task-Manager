@@ -52,7 +52,7 @@ export default function ConfirmAccount() {
   return (
     <main className="flex h-full min-h-[590px] w-full max-w-full items-center justify-center">
       <div className="h-full w-full rounded-md p-5">
-        "Logo"
+       
         <h1 className="mb-4 mt-8 text-center text-xl font-bold tracking-[-0.16px] dark:text-[#fcfdffef] sm:text-left">
           Account confirmation
         </h1>

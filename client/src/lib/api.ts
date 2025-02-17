@@ -43,17 +43,23 @@ export const loginMutationFn = async (data: LoginType) =>
 export const registerMutationFn = async (data: registerType) =>
   await API.post(`/auth/register`, data);
 
-export const getUserSessionQueryFn = async () => await API.get(`/session`);
-
 export const verifyEmailMutationFn = async (data: verifyEmailType) =>
   await API.post(`/auth/verify/email`, data);
+
+export const forgotPasswordMutationFn = async (data: forgotPasswordType) =>
+  await API.post(`/auth/password/forgot`, data);
+
+export const resetPasswordMutationFn = async (data: resetPasswordType) =>
+  await API.post(`/auth/password/reset`, data);
+
+export const logoutMutationFn = async () => await API.post(`/auth/logout`);
 
 export const sessionsQueryFn = async () => {
   const response = await API.get<SessionResponseType>(`/session/all`);
   return response.data;
 };
 
+export const getUserSessionQueryFn = async () => await API.get(`/session/`);
+
 export const sessionDeleteMutationFn = async (id: string) =>
   await API.delete(`/session/${id}`);
-
-export const logoutMutationFn = async () => await API.post(`/auth/logout`);
