@@ -8,6 +8,7 @@ import { AxiosResponse } from "axios";
 import { toast } from "@/hooks/use-toast";
 import {
   createTaskMutationFn,
+  deleteTaskMutationFn,
   getTaskMutationFn,
   getTasksMutationFn,
   updateTaskMutationFn,
@@ -23,6 +24,7 @@ type TaskContextType = {
   updateTask: UseMutationResult<AxiosResponse<any>, Error, TaskType, unknown>;
   getTask: UseMutationResult<AxiosResponse<any>, Error, string, unknown>;
   getTasks: UseMutationResult<AxiosResponse<any>, Error, void, unknown>;
+  deleteTask: UseMutationResult<AxiosResponse<any>, Error, string, unknown>;
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   error: any;
@@ -148,6 +150,29 @@ export const TasksProvider = ({ children }: any) => {
     },
   });
 
+  const deleteTask = useMutation<AxiosResponse<TaskType>, Error, string>({
+    mutationFn: deleteTaskMutationFn,
+    onSuccess: (response) => {
+      const { data } = response;
+      const deletedTaskId = data?._id;
+      setTasks((prevTasks) =>
+        prevTasks.filter((task) => task._id !== deletedTaskId)
+      );
+      toast({
+        title: "Delete",
+        description: "Task successfully deleted",
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to delete task",
+        variant: "destructive",
+      });
+    },
+  });
+
   useEffect(() => {
     if (userId) getTasks.mutate();
   }, [userId]);
@@ -161,6 +186,7 @@ export const TasksProvider = ({ children }: any) => {
         getTasks,
         createTask,
         updateTask,
+        deleteTask,
         isEditing,
         setIsEditing,
         openModalForAdd,

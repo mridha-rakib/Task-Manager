@@ -65,9 +65,6 @@ export class TaskRepository {
     const session = await validateSession(sessionId);
     const { userId: user } = session;
     const user_id = user._id.toString();
-    const result = await TaskModel.find({
-      _id: new mongoose.Types.ObjectId(taskId),
-    });
 
     const task = await TaskModel.findById(taskId);
 
@@ -102,5 +99,24 @@ export class TaskRepository {
     }
 
     return updatedTask;
+  }
+
+  public async deleteTask({
+    sessionId,
+    taskId,
+  }: {
+    sessionId: string;
+    taskId: string;
+  }) {
+    const session = await validateSession(sessionId);
+    const { userId: user } = session;
+    const user_id = user._id.toString();
+
+    const task = await TaskModel.findById(taskId);
+
+    await validateTask(taskId, user_id);
+
+    const response = await TaskModel.findByIdAndDelete(taskId);
+    return response;
   }
 }

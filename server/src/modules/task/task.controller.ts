@@ -76,4 +76,20 @@ export class TaskController {
     const task = await this.taskRepository.getTask({ sessionId, taskId });
     res.status(HTTPSTATUS.OK).json(task);
   });
+
+  public deleteTask = asyncHandler(async (req, res) => {
+    const {
+      params: { id: taskId },
+    } = await zParse(getTaskSchema, req, res);
+
+    const sessionId = req.sessionId;
+    if (!sessionId) {
+      throw new NotFoundException('Session is invalid.');
+    }
+    const deletedTask = await this.taskRepository.deleteTask({
+      sessionId,
+      taskId,
+    });
+    return res.status(HTTPSTATUS.OK).json(deletedTask);
+  });
 }

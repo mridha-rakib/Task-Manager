@@ -8,5 +8,6 @@ taskRouter.route('/create').post(authenticateJWT, taskController.createTask);
 taskRouter.route('/').post(authenticateJWT, taskController.getTasks);
 taskRouter.route('/:id').put(authenticateJWT, taskController.updateTask);
 taskRouter.route('/:id').post(authenticateJWT, taskController.getTask);
+taskRouter.route('/:id').delete(authenticateJWT, taskController.deleteTask);
 
 export default taskRouter;

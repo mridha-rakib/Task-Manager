@@ -45,8 +45,6 @@ export default function CreateTask(props: {
   const { isDialogOpen, setIsDialogOpen, mode = "create", task } = props;
   const { createTask, updateTask } = useTasks();
 
-  console.log(task);
-
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {

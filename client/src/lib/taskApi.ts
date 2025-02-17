@@ -30,3 +30,6 @@ export const updateTaskMutationFn = async (data: TaskType) => {
 
   return await API.put(`/task/${data._id}`, data);
 };
+
+export const deleteTaskMutationFn = async (id: string | undefined) =>
+  await API.delete(`/task/${id}`);

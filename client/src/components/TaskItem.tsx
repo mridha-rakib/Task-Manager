@@ -4,14 +4,15 @@ import { motion } from "framer-motion";
 import { Edit2, Star, Trash2 } from "lucide-react";
 
 import CreateTask from "@/app/(main)/components/common/CreateTaskDialog";
-import { useTasks } from "@/context/task-provider";
+import DeleteTaskDialog from "@/app/(main)/components/common/DeleteDialog";
 import { item } from "@/utils/animations";
 import { formatTime } from "@/utils/utilities";
 
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 function TaskItem({ task }: any) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   return (
     <motion.div
@@ -31,25 +32,41 @@ function TaskItem({ task }: any) {
         <p className="text-gray-400 text-sm">{formatTime(task.createdAt)}</p>
         <div>
           <div className="text-gray-400 flex items-center gap-3 text-[1.2rem]">
-            <button
-              className={`${
-                task.completed ? "text-yellow-400" : "text-gray-400"
-              }`}
-            >
-              {<Star />}
-            </button>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>{<Edit2 />}</DialogTrigger>
+            {/* Edit Dialog */}
+            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+              <DialogTrigger asChild>
+                <button>
+                  <Edit2 />
+                </button>
+              </DialogTrigger>
               <DialogContent>
                 <CreateTask
-                  isDialogOpen={isDialogOpen}
-                  setIsDialogOpen={setIsDialogOpen}
+                  isDialogOpen={isEditDialogOpen}
+                  setIsDialogOpen={setIsEditDialogOpen}
                   mode="edit"
                   task={task}
                 />
               </DialogContent>
             </Dialog>
-            <button className="text-[#F65314]">{<Trash2 />}</button>
+
+            {/* Delete Dialog */}
+            <Dialog
+              open={isDeleteDialogOpen}
+              onOpenChange={setIsDeleteDialogOpen}
+            >
+              <DialogTrigger asChild>
+                <button>
+                  <Trash2 className="text-[#F65314]" />
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DeleteTaskDialog
+                  isDialogOpen={isDeleteDialogOpen}
+                  setIsDialogOpen={setIsDeleteDialogOpen}
+                  task={task}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>
