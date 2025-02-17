@@ -57,7 +57,7 @@ export const TasksProvider = ({ children }: any) => {
   const openModalForEdit = (task: any) => {
     setModalMode("edit");
     setIsEditing(true);
-    setTask(null);
+    setTask(task);
   };
 
   const closeModal = () => {

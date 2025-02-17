@@ -68,9 +68,9 @@ export class TaskRepository {
     const result = await TaskModel.find({
       _id: new mongoose.Types.ObjectId(taskId),
     });
-    console.log(result);
+
     const task = await TaskModel.findById(taskId);
-    console.log(taskId, user_id);
+
     await validateTask(taskId, user_id);
 
     return task;

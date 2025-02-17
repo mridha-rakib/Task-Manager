@@ -30,6 +30,7 @@ export const loginSchema = z.object({
 });
 
 export const taskSchema = z.object({
+  _id: z.string().optional(),
   user: z
     .string({ required_error: "User id required" })
     .min(1, "User ID is required")

@@ -45,6 +45,8 @@ export default function CreateTask(props: {
   const { isDialogOpen, setIsDialogOpen, mode = "create", task } = props;
   const { createTask, updateTask } = useTasks();
 
+  console.log(task);
+
   const form = useForm<z.infer<typeof taskSchema>>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -57,7 +59,6 @@ export default function CreateTask(props: {
     },
   });
 
-  // Pre-fill the form if in edit mode
   useEffect(() => {
     if (mode === "edit" && task) {
       form.reset(task);
@@ -165,12 +166,22 @@ export default function CreateTask(props: {
                           value={field.value}
                           onValueChange={field.onChange}
                         >
-                          <SelectTrigger className="w-[100px] cursor-pointer rounded-md border bg-[#F9F9F9] p-2">
+                          <SelectTrigger className="w-[100px] cursor-pointer rounded-md border bg-[#F9F9F9] p-2 dark:bg-[#2d2d2d] dark:text-[#f1f7feb5]">
                             <SelectValue placeholder="Select Status" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="complete">Complete</SelectItem>
+                          <SelectContent className="dark:bg-[#2d2d2d] dark:text-[#f1f7feb5]">
+                            <SelectItem
+                              value="pending"
+                              className="dark:hover:bg-[#3d3d3d]"
+                            >
+                              Pending
+                            </SelectItem>
+                            <SelectItem
+                              value="complete"
+                              className="dark:hover:bg-[#3d3d3d]"
+                            >
+                              Complete
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
@@ -195,12 +206,22 @@ export default function CreateTask(props: {
                             field.onChange(value === "true")
                           }
                         >
-                          <SelectTrigger className="w-[100px] cursor-pointer rounded-md border bg-[#F9F9F9] p-2">
+                          <SelectTrigger className="w-[100px] cursor-pointer rounded-md border bg-[#F9F9F9] p-2 dark:bg-[#2d2d2d] dark:text-[#f1f7feb5]">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="false">No</SelectItem>
-                            <SelectItem value="true">Yes</SelectItem>
+                          <SelectContent className="dark:bg-[#2d2d2d] dark:text-[#f1f7feb5]">
+                            <SelectItem
+                              value="false"
+                              className="dark:hover:bg-[#3d3d3d]"
+                            >
+                              No
+                            </SelectItem>
+                            <SelectItem
+                              value="true"
+                              className="dark:hover:bg-[#3d3d3d]"
+                            >
+                              Yes
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>

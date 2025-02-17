@@ -12,7 +12,6 @@ const jwtRefreshExpiresIn = env.JWT_REFRESH_EXPIRES_IN;
 const jwtRefreshExp = calculateExpirationDate(jwtRefreshExpiresIn);
 const jwtRefreshTimeStamp = new Date(jwtRefreshExp).getTime();
 
-console.log(jwtExpire, jwtRefreshExp);
 export type AccessTPayload = {
   userId: Extract<IUserDocument['_id'], string>;
   sessionId: Extract<SessionDocument['_id'], string>;
@@ -57,7 +56,7 @@ export const verifyJwtToken = <TPayload extends object = AccessTPayload>(
 ) => {
   try {
     const { secret = env.JWT_SECRET, ...opts } = options || {};
-    console.log(opts);
+
     const payload = jwt.verify(token, secret, {
       ...defaults,
       ...opts,

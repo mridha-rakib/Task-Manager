@@ -61,7 +61,7 @@ export class AuthController {
 
   public refreshToken = asyncHandler(async (req, res): Promise<any> => {
     const refreshToken = req.cookies.refreshToken as string | undefined;
-    console.log(refreshToken);
+
     if (!refreshToken) {
       throw new UnauthorizedException('Missing refresh token');
     }
@@ -113,7 +113,7 @@ export class AuthController {
 
   public resetPassword = asyncHandler(async (req, res): Promise<any> => {
     const data = await zParse(resetPasswordSchema, req.body, res);
-   
+
     await this.authRepository.resetPassword(data);
 
     return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({

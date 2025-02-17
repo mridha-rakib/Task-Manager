@@ -84,7 +84,13 @@ const Asidebar = () => {
           <div className="justify-between">
             <div className="flex h-[60px] items-center">
               <Link href="/">
-                <Image src={tms} alt="logo" height={110} width={110} />
+                <Image
+                  src={tms}
+                  alt="logo"
+                  height={100}
+                  width={100}
+                  className="rounded-full"
+                />
               </Link>
               {open && (
                 <Link

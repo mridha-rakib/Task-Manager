@@ -23,5 +23,10 @@ export const getTaskMutationFn = async (
   id: string
 ): Promise<AxiosResponse<TaskType>> => await API.post(`/task/${id}`);
 
-export const updateTaskMutationFn = async (data: TaskType) =>
-  await API.put(`/task/${data._id}`);
+export const updateTaskMutationFn = async (data: TaskType) => {
+  if (!data._id) {
+    throw new Error("Task ID is required for updating a task");
+  }
+
+  return await API.put(`/task/${data._id}`, data);
+};

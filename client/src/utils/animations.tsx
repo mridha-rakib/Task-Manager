@@ -10,6 +10,11 @@ export const container = {
 };
 
 export const item = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  hidden: { opacity: 0, backgroundColor: "var(--background)" },
+  visible: {
+    opacity: 1,
+    backgroundColor: "var(--primary)",
+    color: "var(--primary-foreground)",
+    transition: { duration: 0.3 },
+  },
 };
