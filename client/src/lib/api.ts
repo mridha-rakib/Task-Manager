@@ -28,6 +28,15 @@ type SessionResponseType = {
   sessions: SessionType[];
 };
 
+type TaskType = {
+  user?: string;
+  title: string;
+  description?: string;
+  dueDate: Date;
+  status: "pending" | "complete";
+  completed?: boolean;
+};
+
 export const loginMutationFn = async (data: LoginType) =>
   await API.post("/auth/login", data);
 
@@ -48,7 +57,3 @@ export const sessionDeleteMutationFn = async (id: string) =>
   await API.delete(`/session/${id}`);
 
 export const logoutMutationFn = async () => await API.post(`/auth/logout`);
-
-
-// task mutation functions
-export const createTaskMutationFn = async(data:)

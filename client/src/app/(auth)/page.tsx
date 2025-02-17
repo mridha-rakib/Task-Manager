@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { loginMutationFn } from "@/lib/api";
+import { loginSchema } from "@/lib/validation";
 
 import tms from "../../../public/tms.png";
 
@@ -31,30 +32,17 @@ export default function Login() {
     mutationFn: loginMutationFn,
   });
 
-  const formSchema = z.object({
-    email: z.string().trim().email().min(1, {
-      message: "Email is required",
-    }),
-    password: z.string().trim().min(1, {
-      message: "Password is required",
-    }),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof loginSchema>) => {
     mutate(values, {
       onSuccess: (response) => {
-        if (response.data.mfaRequired) {
-          router.replace(`/verify-mfa?email=${values.email}`);
-          return;
-        }
         router.replace(`/home`);
       },
       onError: (error) => {

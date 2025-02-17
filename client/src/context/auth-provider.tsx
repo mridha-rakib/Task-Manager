@@ -5,6 +5,7 @@ import React, { createContext, useContext } from "react";
 import useAuth from "@/hooks/use-auth";
 
 type UserType = {
+  _id: string;
   name: string;
   email: string;
   avatar: string;

@@ -1,34 +1,43 @@
-import React from "react";
+"use client";
 
-import Sessions from "../components/Session";
+import React, { useState } from "react";
 
-const Home = () => {
+import { useMutation } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+
+import TaskItem from "@/components/TaskItem";
+import { useTasks } from "@/context/task-provider";
+import { toast } from "@/hooks/use-toast";
+import { getTasksMutationFn } from "@/lib/taskApi";
+import { container, item } from "@/utils/animations";
+
+import CreateTask from "../components/common/CreateTaskDialog";
+
+export default function Home() {
+  const { tasks, openModalForAdd } = useTasks();
+
   return (
-    <div>
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-2 px-6 py-8 md:max-w-5xl">
-        <h1 className="dark:text-inherit text-[28px] font-extrabold leading-[34px] tracking-[-0.416px] text-[#000509e3]">
-          Setup security and sessions
-        </h1>
-        <p className="dark:text-gray-100 text-sm font-normal text-[#0007149f]">
-          Follow the steps to activate using the TMS
-        </p>
+    <main className="m-6 h-full">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">All Tasks</h1>
       </div>
-      <div className="relative mx-auto w-full max-w-3xl px-6 py-0 md:max-w-5xl">
-        <div className="steps-gradient dark:bg-gray-800 absolute top-0 h-[700px] w-px"></div>
 
-        <div className="flex flex-col gap-5">
-          <div className="relative pl-6 transition duration-200 ease-in-out">
-            <div className="bg-white rounded-full absolute -left-[9.5px] top-7 z-10 block h-5 w-5 dark:bg-background">
-              <div className="rounded-full ml-1 mt-1 h-3 w-3 border-2 border-primary transition duration-200 ease-in-out"></div>
-            </div>
-            <div>
-              <Sessions />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <motion.div
+        className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[1.5rem] pb-[2rem]"
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+        {tasks?.map((task, i) => <TaskItem key={i} task={task} />)}
+
+        <motion.button
+          className="text-gray-500 border-gray-400 hover:bg-gray-300 h-[16rem] w-full rounded-md border-2 border-dashed py-2 text-lg font-medium transition duration-200 ease-in-out hover:border-none"
+          onClick={openModalForAdd}
+          variants={item}
+        >
+          Add New Task
+        </motion.button>
+      </motion.div>
+    </main>
   );
-};
-
-export default Home;
+}

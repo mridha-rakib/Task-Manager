@@ -16,3 +16,16 @@ export interface ITaskModel extends Model<ITaskDocument> {}
 export interface ITaskMethods extends ITaskDocument {}
 export interface ITaskPaginateModel
   extends AggregatePaginateModel<ITaskDocument> {}
+
+export interface IUpdateTask {
+  sessionId: string;
+  taskId: string;
+  data: Partial<{
+    user?: string;
+    title?: string;
+    description?: string;
+    dueDate?: Date;
+    status?: 'pending' | 'complete';
+    completed?: boolean;
+  }>;
+}

@@ -18,6 +18,23 @@ export const taskSchemaGeneric = z.object({
   completed: z.boolean().default(false),
 });
 
+const params = {
+  params: z.object({
+    id: z.string({
+      required_error: 'Task Id is required',
+    }),
+  }),
+};
+
 export const createTaskSchema = z.object({
   body: taskSchemaGeneric,
+});
+
+export const updateTaskSchema = z.object({
+  ...params,
+  body: taskSchemaGeneric.partial(),
+});
+
+export const getTaskSchema = z.object({
+  ...params,
 });

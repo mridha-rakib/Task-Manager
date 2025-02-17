@@ -60,8 +60,6 @@ export class AuthRepository {
     });
 
     const verificationUrl = `${env.APP_ORIGIN}/confirm-account?code=${verification.code}`;
-    console.log(newUser.email);
-    console.log(verificationUrl);
     await sendEmail({
       to: newUser.email,
       ...verifyEmailTemplate(verificationUrl),
@@ -102,7 +100,7 @@ export class AuthRepository {
       userId: user._id.toString(),
       sessionId: session._id?.toString(),
     });
-    
+
     const refreshToken = signJwtToken(
       {
         sessionId: session._id,

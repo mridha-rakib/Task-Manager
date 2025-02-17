@@ -113,7 +113,7 @@ export class AuthController {
 
   public resetPassword = asyncHandler(async (req, res): Promise<any> => {
     const data = await zParse(resetPasswordSchema, req.body, res);
-    console.log(data);
+   
     await this.authRepository.resetPassword(data);
 
     return clearAuthenticationCookies(res).status(HTTPSTATUS.OK).json({
