@@ -6,7 +6,7 @@ import {
 } from 'passport-jwt';
 import { UnauthorizedException } from '../utils/catch-errors';
 import env from '@/env';
-import { userController, userRepository } from '@/modules/user/user.module';
+import { userRepository } from '@/modules/user/user.module';
 
 interface JwtPayload {
   userId: string;
@@ -40,7 +40,7 @@ export const setupJwtStrategy = (passport: PassportStatic) => {
         }
 
         req.sessionId = payload.sessionId;
-        
+
         return done(null, user);
       } catch (error) {
         return done(error, false);
