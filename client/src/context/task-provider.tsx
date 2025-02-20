@@ -31,9 +31,6 @@ type TaskContextType = {
   isLoading: boolean;
   isFetching: boolean;
   modalMode: string;
-  openModalForAdd: () => void;
-  openModalForEdit: (task: TaskType) => void;
-  closeModal: () => void;
   refetch: () => void;
 };
 
@@ -50,23 +47,6 @@ export const TasksProvider = ({ children }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [modalMode, setModalMode] = useState("");
 
-  const openModalForAdd = () => {
-    setModalMode("add");
-    setIsEditing(true);
-    setTask(null);
-  };
-
-  const openModalForEdit = (task: any) => {
-    setModalMode("edit");
-    setIsEditing(true);
-    setTask(task);
-  };
-
-  const closeModal = () => {
-    setIsEditing(false);
-    setModalMode("");
-    setTask(null);
-  };
   const getTasks = useMutation<AxiosResponse<TaskType[]>, Error, void>({
     mutationFn: getTasksMutationFn,
     onSuccess: (response) => {
@@ -110,7 +90,6 @@ export const TasksProvider = ({ children }: any) => {
         title: "Success",
         description: "Task created successfully!",
       });
-      closeModal();
     },
     onError: (error) => {
       console.error(error);
@@ -137,8 +116,6 @@ export const TasksProvider = ({ children }: any) => {
         title: "Success",
         description: "Task updated successfully!",
       });
-
-      closeModal();
     },
     onError: (error) => {
       console.error(error);
@@ -189,9 +166,6 @@ export const TasksProvider = ({ children }: any) => {
         deleteTask,
         isEditing,
         setIsEditing,
-        openModalForAdd,
-        openModalForEdit,
-        closeModal,
         modalMode,
         error: getTasks.error,
         isLoading: getTasks.isPending,

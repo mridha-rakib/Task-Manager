@@ -13,6 +13,12 @@ import {
   validateSession,
   validateTask,
 } from '@/common/utils/helperFn';
+import type { PipelineStage } from 'mongoose';
+
+interface SearchCriteria {
+  dueDate?: Date;
+  status?: 'pending' | 'complete';
+}
 
 export class TaskRepository {
   public async createTask({ data, sessionId }: any) {
@@ -40,7 +46,7 @@ export class TaskRepository {
     };
   }
 
-  public async getTasks(sessionId: string) {
+  public async getTasks(sessionId: string, searchCriteria: SearchCriteria) {
     const session = await SessionModel.findById(sessionId)
       .populate('userId')
       .select('-expiresAt');
@@ -50,7 +56,28 @@ export class TaskRepository {
     }
 
     const { userId: user } = session;
-    const tasks = await TaskModel.find({ user: user._id });
+
+    // const pipeline: PipelineStage[] = [
+    //   {
+    //     $match: {
+    //       user: user._id,
+    //       ...(filters.dueDate && { dueDate: { $gte: filters.dueDate } }),
+    //       ...(filters.status && { status: filters.status }),
+    //     },
+    //   },
+    //   {
+    //     $sort: { dueDate: 1 },
+    //   },
+    // ];
+
+    const searchPipeline = this.buildSearchPipeline(searchCriteria);
+    searchPipeline.unshift({
+      $match: {
+        user: user._id,
+      },
+    });
+
+    const tasks = await TaskModel.aggregate(searchPipeline);
 
     return tasks;
   }
@@ -118,5 +145,29 @@ export class TaskRepository {
 
     const response = await TaskModel.findByIdAndDelete(taskId);
     return response;
+  }
+
+  private async buildSearchPipeline(
+    criteria: SearchCriteria
+  ): Promise<PipelineStage[]> {
+    const pipeline: PipelineStage[] = [];
+
+    if (criteria.dueDate) {
+      pipeline.push({
+        $match: {
+          dueDate: criteria.dueDate,
+        },
+      });
+    }
+
+    if (criteria.status) {
+      pipeline.push({
+        $match: {
+          status: criteria.status,
+        },
+      });
+    }
+
+    return pipeline;
   }
 }

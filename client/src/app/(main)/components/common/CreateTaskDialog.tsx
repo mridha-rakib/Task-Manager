@@ -65,9 +65,17 @@ export default function CreateTask(props: {
 
   const onSubmit = (values: z.infer<typeof taskSchema>) => {
     if (mode === "edit") {
-      updateTask.mutate(values);
+      updateTask.mutate(values, {
+        onSuccess: () => {
+          setIsDialogOpen(false);
+        },
+      });
     } else {
-      createTask.mutate(values);
+      createTask.mutate(values, {
+        onSuccess: () => {
+          setIsDialogOpen(false);
+        },
+      });
     }
   };
 

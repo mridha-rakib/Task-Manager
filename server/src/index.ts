@@ -1,5 +1,5 @@
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../swagger_output.json';
+import swaggerDocument from '../swagger-output.json';
 import app from '@/app';
 import env from './env';
 import { logger } from './middlewares/pino-logger';

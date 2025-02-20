@@ -5,16 +5,17 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 import {
-  ChevronsUpDown,
+  Check,
   EllipsisIcon,
+  FileCheck,
   Home,
   Loader,
   Lock,
   LogOut,
-  MoonIcon,
   MoonStarIcon,
   Settings,
   SunIcon,
+  Timer,
   User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -70,7 +71,11 @@ const Asidebar = () => {
       url: "#",
       icon: User,
     },
-
+    {
+      icon: FileCheck,
+      title: "Completed",
+      link: "/completed",
+    },
     {
       title: "Settings",
       url: "#",
